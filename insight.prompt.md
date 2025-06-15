@@ -1,12 +1,15 @@
 # AI Model Insights Analysis Template
 
-Based on the data query methods in `query_examples.py`, I want to extract comprehensive model insights:
+## Data Source 
+`data/models/notable_ai_models.sql` is the data format definition, and the database file is located in `db/ai_insights.db`.
 
+## Insight Mining Requirements
+I want to extract comprehensive model insights:
 - Analyze all AI models with a scatter plot where:
   - X-axis: Model release year
   - Y-axis: Model parameter count (trainable parameters) 
   - Y-axis scale: Logarithmic (log10) to handle the wide range of parameter sizes
-  - domain as series differentiation
+  - domain as series differentiation (The primary domain(s) the model is designed for)
 
 folder_name=insights/model_size
 Implementation approach divided into four stages:
@@ -20,6 +23,7 @@ Execute the extraction script to generate processed data and output results to `
 ## Stage 3: Visualization Development
 Generate `$folder_name/index.html` with the following specifications:
 - Utilize ECharts visualization library
+- Please refer to the visual effects in the components, layouts, and styles directories under the `template` directory
 - Select appropriate chart type for professional data presentation
 - Load data dynamically from `$folder_name/data.json`
 - Apply modern, tech-focused styling that conveys scientific rigor
