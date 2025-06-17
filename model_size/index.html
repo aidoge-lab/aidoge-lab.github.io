@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 模型参数规模演进图</title>
+    <title>AI Model Parameter Scale Evolution Chart</title>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <style>
         body {
@@ -83,52 +83,52 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1 class="title">AI 模型参数规模演进图</h1>
-            <p class="subtitle">展示 1950-2025 年间 AI 模型发布年份与参数数量的关系</p>
+            <h1 class="title">AI Model Parameter Scale Evolution Chart</h1>
+            <p class="subtitle">Showing the relationship between AI model release years and parameter counts from 1950-2025</p>
         </div>
         
         <div class="stats" id="stats">
             <div class="stat-item">
                 <div class="stat-value">-</div>
-                <div class="stat-label">模型总数</div>
+                <div class="stat-label">Total Models</div>
             </div>
             <div class="stat-item">
                 <div class="stat-value">-</div>
-                <div class="stat-label">年份范围</div>
+                <div class="stat-label">Year Range</div>
             </div>
             <div class="stat-item">
                 <div class="stat-value">-</div>
-                <div class="stat-label">参数范围</div>
+                <div class="stat-label">Parameter Range</div>
             </div>
             <div class="stat-item">
                 <div class="stat-value">-</div>
-                <div class="stat-label">领域数量</div>
+                <div class="stat-label">Domain Count</div>
             </div>
         </div>
 
         <div id="chart"></div>
         
         <div class="legend">
-            <div class="legend-title">图表说明：</div>
+            <div class="legend-title">Chart Description:</div>
             <ul>
-                <li><strong>X 轴</strong>：模型发布年份 (1950-2025)</li>
-                <li><strong>Y 轴</strong>：模型参数数量的对数值 (log₁₀)</li>
-                <li><strong>颜色</strong>：不同颜色代表不同的应用领域</li>
-                <li><strong>交互</strong>：鼠标悬停查看详细信息，可缩放和平移</li>
+                <li><strong>X-axis</strong>: Model release year (1950-2025)</li>
+                <li><strong>Y-axis</strong>: Logarithmic value of model parameters (log₁₀)</li>
+                <li><strong>Colors</strong>: Different colors represent different application domains</li>
+                <li><strong>Interactions</strong>: Hover to view details, zoom and pan available</li>
             </ul>
         </div>
 
         <div class="note">
-            <strong>数据来源：</strong>来自 ai_insights.db 数据库中的历史 AI 模型数据。
-            Y 轴使用对数刻度以更好地展示从几十个参数到万亿级参数的巨大跨度。
+            <strong>Data Source:</strong> Historical AI model data from the ai_insights.db database.
+            Y-axis uses logarithmic scale to better display the huge range from dozens to trillions of parameters.
         </div>
     </div>
 
     <script>
-        // 加载数据并初始化图表
+        // Load data and initialize chart
         async function loadDataAndInitChart() {
             try {
-                // 加载数据文件
+                // Load data files
                 const [dataResponse, statResponse] = await Promise.all([
                     fetch('./data.json'),
                     fetch('./stat.json')
@@ -137,15 +137,15 @@
                 const chartData = await dataResponse.json();
                 const statData = await statResponse.json();
                 
-                // 更新统计信息
+                // Update statistics
                 updateStats(statData);
                 
-                // 初始化图表
+                // Initialize chart
                 initChart(chartData, statData);
                 
             } catch (error) {
-                console.error('加载数据失败:', error);
-                document.getElementById('chart').innerHTML = '<div style="text-align: center; padding: 50px; color: #999;">数据加载失败，请确保 data.json 和 stat.json 文件存在</div>';
+                console.error('Failed to load data:', error);
+                document.getElementById('chart').innerHTML = '<div style="text-align: center; padding: 50px; color: #999;">Failed to load data. Please ensure data.json and stat.json files exist</div>';
             }
         }
 
@@ -163,26 +163,26 @@
             const chartDom = document.getElementById('chart');
             const myChart = echarts.init(chartDom);
 
-            // 定义颜色方案
+            // Define color scheme
             const colors = [
                 '#5470c6', '#91cc75', '#fac858', '#ee6666', 
                 '#73c0de', '#3ba272', '#fc8452', '#9a60b4', 
                 '#ea7ccc', '#d2691e'
             ];
 
-            // 准备系列数据
+            // Prepare series data
             const series = chartData.series.map((serie, index) => ({
                 name: serie.name,
                 type: 'scatter',
                 data: serie.data,
                 symbolSize: function(data) {
-                    // 根据置信度和前沿模型状态调整点的大小
+                    // Adjust point size based on confidence and frontier model status
                     const baseSize = 8;
                     const info = data[2];
                     let size = baseSize;
                     
                     if (info.frontier_model === 1) {
-                        size += 4; // 前沿模型更大
+                        size += 4; // Frontier models are larger
                     }
                     
                     return size;
@@ -202,8 +202,8 @@
 
             const option = {
                 title: {
-                    text: 'AI 模型参数规模演进',
-                    subtext: '参数数量对数值 vs 发布年份',
+                    text: 'AI Model Parameter Scale Evolution',
+                    subtext: 'Parameter Count Log Value vs Release Year',
                     left: 'center',
                     textStyle: {
                         fontSize: 20,
@@ -231,12 +231,12 @@
                         return `
                             <div style="padding: 10px;">
                                 <div style="font-weight: bold; font-size: 16px; margin-bottom: 8px;">${info.model}</div>
-                                <div><strong>发布年份:</strong> ${data[0]}</div>
-                                <div><strong>参数数量:</strong> ${paramStr} (${paramCount.toLocaleString()})</div>
-                                <div><strong>领域:</strong> ${info.domain}</div>
-                                <div><strong>组织:</strong> ${info.organization || '未知'}</div>
-                                ${info.confidence ? `<div><strong>置信度:</strong> ${info.confidence}</div>` : ''}
-                                ${info.frontier_model === 1 ? '<div style="color: #ff6b6b;"><strong>★ 前沿模型</strong></div>' : ''}
+                                <div><strong>Release Year:</strong> ${data[0]}</div>
+                                <div><strong>Parameters:</strong> ${paramStr} (${paramCount.toLocaleString()})</div>
+                                <div><strong>Domain:</strong> ${info.domain}</div>
+                                <div><strong>Organization:</strong> ${info.organization || 'Unknown'}</div>
+                                ${info.confidence ? `<div><strong>Confidence:</strong> ${info.confidence}</div>` : ''}
+                                ${info.frontier_model === 1 ? '<div style="color: #ff6b6b;"><strong>★ Frontier Model</strong></div>' : ''}
                             </div>
                         `;
                     },
@@ -264,7 +264,7 @@
                 },
                 xAxis: {
                     type: 'value',
-                    name: '发布年份',
+                    name: 'Release Year',
                     nameLocation: 'middle',
                     nameGap: 30,
                     min: statData.year_range.min - 5,
@@ -282,7 +282,7 @@
                 },
                 yAxis: {
                     type: 'value',
-                    name: '参数数量 (log₁₀)',
+                    name: 'Parameter Count (log₁₀)',
                     nameLocation: 'middle',
                     nameGap: 50,
                     min: 0,
@@ -310,7 +310,7 @@
                             type: ['rect', 'polygon', 'clear']
                         },
                         saveAsImage: {
-                            name: 'AI模型参数规模演进图'
+                            name: 'AI_Model_Parameter_Scale_Evolution_Chart'
                         }
                     }
                 },
@@ -336,19 +336,19 @@
 
             myChart.setOption(option);
 
-            // 响应式调整
+            // Responsive adjustment
             window.addEventListener('resize', function() {
                 myChart.resize();
             });
 
-            // 添加点击事件
+            // Add click event
             myChart.on('click', function(params) {
                 const info = params.data[2];
-                console.log('点击的模型:', info);
+                console.log('Clicked model:', info);
             });
         }
 
-        // 页面加载完成后初始化
+        // Initialize after page load
         document.addEventListener('DOMContentLoaded', loadDataAndInitChart);
     </script>
 </body>
