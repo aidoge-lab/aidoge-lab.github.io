@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 洞察图表</title>
+    <title>AI Insights Charts</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -98,55 +98,55 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1 class="title">AI 洞察图表</h1>
-            <p class="subtitle">探索人工智能发展的数据可视化</p>
+            <h1 class="title">AI Insights Charts</h1>
+            <p class="subtitle">Explore data visualizations of artificial intelligence development</p>
         </div>
         
         <div class="chart-grid">
             <a href="./model_size/" class="chart-card">
-                <div class="chart-title">AI 模型参数规模演进图表</div>
+                <div class="chart-title">AI Model Parameter Scale Evolution Chart</div>
                 <div class="chart-description">
-                    展示从1950年到2025年AI模型发布年份与参数数量的关系，使用对数刻度显示从几十个到万亿级参数的巨大范围。
+                    Shows the relationship between AI model release years and parameter counts from 1950 to 2025, using logarithmic scale to display the vast range from dozens to trillions of parameters.
                 </div>
                 <div class="chart-meta">
-                    <span class="chart-type">散点图</span>
-                    <span class="chart-status">✓ 可用</span>
+                    <span class="chart-type">Scatter Plot</span>
+                    <span class="chart-status">✓ Available</span>
                 </div>
             </a>
             
-            <!-- 可以在这里添加更多图表 -->
+            <!-- More charts can be added here -->
             <div class="chart-card" style="opacity: 0.6; cursor: not-allowed;">
-                <div class="chart-title">AI 技术发展时间线</div>
+                <div class="chart-title">AI Technology Development Timeline</div>
                 <div class="chart-description">
-                    即将推出：展示重要AI技术突破和里程碑事件的时间线图表。
+                    Coming soon: Timeline chart showing important AI technology breakthroughs and milestone events.
                 </div>
                 <div class="chart-meta">
-                    <span class="chart-type">时间线</span>
-                    <span class="chart-status" style="color: #ffc107;">⏳ 开发中</span>
+                    <span class="chart-type">Timeline</span>
+                    <span class="chart-status" style="color: #ffc107;">⏳ In Development</span>
                 </div>
             </div>
             
             <div class="chart-card" style="opacity: 0.6; cursor: not-allowed;">
-                <div class="chart-title">AI 应用领域分布</div>
+                <div class="chart-title">AI Application Domain Distribution</div>
                 <div class="chart-description">
-                    即将推出：分析不同应用领域中AI模型的分布和发展趋势。
+                    Coming soon: Analysis of AI model distribution and development trends across different application domains.
                 </div>
                 <div class="chart-meta">
-                    <span class="chart-type">饼图</span>
-                    <span class="chart-status" style="color: #ffc107;">⏳ 开发中</span>
+                    <span class="chart-type">Pie Chart</span>
+                    <span class="chart-status" style="color: #ffc107;">⏳ In Development</span>
                 </div>
             </div>
         </div>
         
         <div class="footer">
-            <p>数据来源：ai_insights.db 数据库 | 使用 ECharts 构建</p>
-            <p>GitHub Pages 自动部署 | 最后更新：<span id="lastUpdate"></span></p>
+            <p>Data Source: ai_insights.db Database | Built with ECharts</p>
+            <p>GitHub Pages Auto Deployment | Last Updated: <span id="lastUpdate"></span></p>
         </div>
     </div>
 
     <script>
-        // 显示最后更新时间
-        document.getElementById('lastUpdate').textContent = new Date().toLocaleDateString('zh-CN');
+        // Display last update time
+        document.getElementById('lastUpdate').textContent = new Date().toLocaleDateString('en-US');
     </script>
 </body>
 </html> 
