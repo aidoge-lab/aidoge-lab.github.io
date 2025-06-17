@@ -1,0 +1,437 @@
+{
+  "year_range": {
+    "min": 1950,
+    "max": 2025,
+    "total_count": 1339
+  },
+  "parameter_range": {
+    "min": 10,
+    "max": 2000000000000,
+    "avg": 49164989327.07312,
+    "min_log": 1.0,
+    "max_log": 12.301029995663981,
+    "avg_log": 8.745052732127906,
+    "total_count": 930
+  },
+  "domain_distribution": [
+    {
+      "domain": "Language",
+      "count": 684,
+      "percentage": 51.08
+    },
+    {
+      "domain": "Other",
+      "count": 325,
+      "percentage": 24.27
+    },
+    {
+      "domain": "Vision",
+      "count": 277,
+      "percentage": 20.69
+    },
+    {
+      "domain": "Video",
+      "count": 20,
+      "percentage": 1.49
+    },
+    {
+      "domain": "Audio",
+      "count": 15,
+      "percentage": 1.12
+    },
+    {
+      "domain": "Mathematics",
+      "count": 10,
+      "percentage": 0.75
+    },
+    {
+      "domain": "Multimodal",
+      "count": 8,
+      "percentage": 0.6
+    }
+  ],
+  "models_per_year": [
+    {
+      "year": 1950,
+      "count": 1,
+      "avg_parameters": 40.0,
+      "min_parameters": 40,
+      "max_parameters": 40
+    },
+    {
+      "year": 1952,
+      "count": 1,
+      "avg_parameters": 40.0,
+      "min_parameters": 40,
+      "max_parameters": 40
+    },
+    {
+      "year": 1955,
+      "count": 1,
+      "avg_parameters": 225.0,
+      "min_parameters": 225,
+      "max_parameters": 225
+    },
+    {
+      "year": 1957,
+      "count": 1,
+      "avg_parameters": 1000.0,
+      "min_parameters": 1000,
+      "max_parameters": 1000
+    },
+    {
+      "year": 1959,
+      "count": 2,
+      "avg_parameters": 1320.5,
+      "min_parameters": 16,
+      "max_parameters": 2625
+    },
+    {
+      "year": 1960,
+      "count": 3,
+      "avg_parameters": 344.6666666666667,
+      "min_parameters": 17,
+      "max_parameters": 1000
+    },
+    {
+      "year": 1969,
+      "count": 1,
+      "avg_parameters": 2450.0,
+      "min_parameters": 2450,
+      "max_parameters": 2450
+    },
+    {
+      "year": 1975,
+      "count": 1,
+      "avg_parameters": 28800.0,
+      "min_parameters": 28800,
+      "max_parameters": 28800
+    },
+    {
+      "year": 1980,
+      "count": 1,
+      "avg_parameters": 1140576.0,
+      "min_parameters": 1140576,
+      "max_parameters": 1140576
+    },
+    {
+      "year": 1981,
+      "count": 1,
+      "avg_parameters": 4096.0,
+      "min_parameters": 4096,
+      "max_parameters": 4096
+    },
+    {
+      "year": 1982,
+      "count": 1,
+      "avg_parameters": 9900.0,
+      "min_parameters": 9900,
+      "max_parameters": 9900
+    },
+    {
+      "year": 1984,
+      "count": 1,
+      "avg_parameters": 9315.0,
+      "min_parameters": 9315,
+      "max_parameters": 9315
+    },
+    {
+      "year": 1986,
+      "count": 1,
+      "avg_parameters": 432.0,
+      "min_parameters": 432,
+      "max_parameters": 432
+    },
+    {
+      "year": 1988,
+      "count": 1,
+      "avg_parameters": 10000.0,
+      "min_parameters": 10000,
+      "max_parameters": 10000
+    },
+    {
+      "year": 1989,
+      "count": 4,
+      "avg_parameters": 10005.0,
+      "min_parameters": 10,
+      "max_parameters": 36627
+    },
+    {
+      "year": 1990,
+      "count": 1,
+      "avg_parameters": 1536.0,
+      "min_parameters": 1536,
+      "max_parameters": 1536
+    },
+    {
+      "year": 1991,
+      "count": 1,
+      "avg_parameters": 8386.0,
+      "min_parameters": 8386,
+      "max_parameters": 8386
+    },
+    {
+      "year": 1992,
+      "count": 4,
+      "avg_parameters": 7334.5,
+      "min_parameters": 594,
+      "max_parameters": 25000
+    },
+    {
+      "year": 1993,
+      "count": 2,
+      "avg_parameters": 829554.0,
+      "min_parameters": 744,
+      "max_parameters": 1658364
+    },
+    {
+      "year": 1994,
+      "count": 4,
+      "avg_parameters": 166262.25,
+      "min_parameters": 1888,
+      "max_parameters": 384000
+    },
+    {
+      "year": 1995,
+      "count": 2,
+      "avg_parameters": 50216400.0,
+      "min_parameters": 432800,
+      "max_parameters": 100000000
+    },
+    {
+      "year": 1996,
+      "count": 1,
+      "avg_parameters": 6452.0,
+      "min_parameters": 6452,
+      "max_parameters": 6452
+    },
+    {
+      "year": 1997,
+      "count": 2,
+      "avg_parameters": 10500.0,
+      "min_parameters": 8000,
+      "max_parameters": 13000
+    },
+    {
+      "year": 1998,
+      "count": 1,
+      "avg_parameters": 60000.0,
+      "min_parameters": 60000,
+      "max_parameters": 60000
+    },
+    {
+      "year": 1999,
+      "count": 1,
+      "avg_parameters": 276.0,
+      "min_parameters": 276,
+      "max_parameters": 276
+    },
+    {
+      "year": 2000,
+      "count": 2,
+      "avg_parameters": 5416145.0,
+      "min_parameters": 3925310,
+      "max_parameters": 6906980
+    },
+    {
+      "year": 2001,
+      "count": 1,
+      "avg_parameters": 120000000.0,
+      "min_parameters": 120000000,
+      "max_parameters": 120000000
+    },
+    {
+      "year": 2003,
+      "count": 3,
+      "avg_parameters": 7027868.333333333,
+      "min_parameters": 451,
+      "max_parameters": 11904264
+    },
+    {
+      "year": 2004,
+      "count": 2,
+      "avg_parameters": 2093287.5,
+      "min_parameters": 90575,
+      "max_parameters": 4096000
+    },
+    {
+      "year": 2005,
+      "count": 3,
+      "avg_parameters": 541498.3333333334,
+      "min_parameters": 178,
+      "max_parameters": 1472256
+    },
+    {
+      "year": 2006,
+      "count": 3,
+      "avg_parameters": 1838220.6666666667,
+      "min_parameters": 114662,
+      "max_parameters": 3800000
+    },
+    {
+      "year": 2007,
+      "count": 3,
+      "avg_parameters": 107000033627.0,
+      "min_parameters": 100881,
+      "max_parameters": 300000000000
+    },
+    {
+      "year": 2008,
+      "count": 4,
+      "avg_parameters": 4536100.0,
+      "min_parameters": 1500000,
+      "max_parameters": 12198000
+    },
+    {
+      "year": 2009,
+      "count": 2,
+      "avg_parameters": 90000000.0,
+      "min_parameters": 80000000,
+      "max_parameters": 100000000
+    },
+    {
+      "year": 2010,
+      "count": 3,
+      "avg_parameters": 31185668.666666668,
+      "min_parameters": 7082000,
+      "max_parameters": 70265000
+    },
+    {
+      "year": 2011,
+      "count": 4,
+      "avg_parameters": 36269629.0,
+      "min_parameters": 15260,
+      "max_parameters": 139808256
+    },
+    {
+      "year": 2012,
+      "count": 10,
+      "avg_parameters": 288812267.0,
+      "min_parameters": 1994300,
+      "max_parameters": 1700000000
+    },
+    {
+      "year": 2013,
+      "count": 13,
+      "avg_parameters": 192087895.23076922,
+      "min_parameters": 37230,
+      "max_parameters": 942000000
+    },
+    {
+      "year": 2014,
+      "count": 12,
+      "avg_parameters": 220040359.0,
+      "min_parameters": 13040,
+      "max_parameters": 1920000000
+    },
+    {
+      "year": 2015,
+      "count": 13,
+      "avg_parameters": 40985871.15384615,
+      "min_parameters": 205190,
+      "max_parameters": 271684800
+    },
+    {
+      "year": 2016,
+      "count": 20,
+      "avg_parameters": 41655774.4,
+      "min_parameters": 409536,
+      "max_parameters": 278000000
+    },
+    {
+      "year": 2017,
+      "count": 26,
+      "avg_parameters": 372519624.7692308,
+      "min_parameters": 2430000,
+      "max_parameters": 8700000000
+    },
+    {
+      "year": 2018,
+      "count": 37,
+      "avg_parameters": 703023999.918919,
+      "min_parameters": 1600000,
+      "max_parameters": 8000000000
+    },
+    {
+      "year": 2019,
+      "count": 117,
+      "avg_parameters": 3201807014.700855,
+      "min_parameters": 8720,
+      "max_parameters": 100000000000
+    },
+    {
+      "year": 2020,
+      "count": 86,
+      "avg_parameters": 5682470411.255814,
+      "min_parameters": 907264,
+      "max_parameters": 175000000000
+    },
+    {
+      "year": 2021,
+      "count": 128,
+      "avg_parameters": 78546208882.71875,
+      "min_parameters": 1683456,
+      "max_parameters": 1571000000000
+    },
+    {
+      "year": 2022,
+      "count": 139,
+      "avg_parameters": 66554574319.42446,
+      "min_parameters": 16000000,
+      "max_parameters": 540350000000
+    },
+    {
+      "year": 2023,
+      "count": 146,
+      "avg_parameters": 54558259069.095894,
+      "min_parameters": 56804,
+      "max_parameters": 1085000000000
+    },
+    {
+      "year": 2024,
+      "count": 95,
+      "avg_parameters": 120083962842.10527,
+      "min_parameters": 185000,
+      "max_parameters": 671000000000
+    },
+    {
+      "year": 2025,
+      "count": 18,
+      "avg_parameters": 323047777777.7778,
+      "min_parameters": 7000000000,
+      "max_parameters": 2000000000000
+    }
+  ],
+  "parameter_categories": [
+    {
+      "category": "Small (<1M)",
+      "count": 68,
+      "min_params": 10,
+      "max_params": 907264
+    },
+    {
+      "category": "Medium (1M-1B)",
+      "count": 428,
+      "min_params": 1140576,
+      "max_params": 942000000
+    },
+    {
+      "category": "Large (1B-100B)",
+      "count": 331,
+      "min_params": 1000000000,
+      "max_params": 98500000000
+    },
+    {
+      "category": "Very Large (100B-1T)",
+      "count": 94,
+      "min_params": 100000000000,
+      "max_params": 671000000000
+    },
+    {
+      "category": "Ultra Large (>1T)",
+      "count": 9,
+      "min_params": 1002700000000,
+      "max_params": 2000000000000
+    }
+  ]
+}

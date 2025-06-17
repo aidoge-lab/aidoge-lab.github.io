@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 模型参数规模演进图</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        #chart {
+            width: 100%;
+            height: 700px;
+        }
+        .legend {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .note {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">AI 模型参数规模演进图</h1>
+            <p class="subtitle">展示 1950-2025 年间 AI 模型发布年份与参数数量的关系</p>
+        </div>
+        
+        <div class="stats" id="stats">
+            <div class="stat-item">
+                <div class="stat-value">-</div>
+                <div class="stat-label">模型总数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">-</div>
+                <div class="stat-label">年份范围</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">-</div>
+                <div class="stat-label">参数范围</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">-</div>
+                <div class="stat-label">领域数量</div>
+            </div>
+        </div>
+
+        <div id="chart"></div>
+        
+        <div class="legend">
+            <div class="legend-title">图表说明：</div>
+            <ul>
+                <li><strong>X 轴</strong>：模型发布年份 (1950-2025)</li>
+                <li><strong>Y 轴</strong>：模型参数数量的对数值 (log₁₀)</li>
+                <li><strong>颜色</strong>：不同颜色代表不同的应用领域</li>
+                <li><strong>交互</strong>：鼠标悬停查看详细信息，可缩放和平移</li>
+            </ul>
+        </div>
+
+        <div class="note">
+            <strong>数据来源：</strong>来自 ai_insights.db 数据库中的历史 AI 模型数据。
+            Y 轴使用对数刻度以更好地展示从几十个参数到万亿级参数的巨大跨度。
+        </div>
+    </div>
+
+    <script>
+        // 加载数据并初始化图表
+        async function loadDataAndInitChart() {
+            try {
+                // 加载数据文件
+                const [dataResponse, statResponse] = await Promise.all([
+                    fetch('./data.json'),
+                    fetch('./stat.json')
+                ]);
+                
+                const chartData = await dataResponse.json();
+                const statData = await statResponse.json();
+                
+                // 更新统计信息
+                updateStats(statData);
+                
+                // 初始化图表
+                initChart(chartData, statData);
+                
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                document.getElementById('chart').innerHTML = '<div style="text-align: center; padding: 50px; color: #999;">数据加载失败，请确保 data.json 和 stat.json 文件存在</div>';
+            }
+        }
+
+        function updateStats(statData) {
+            const statsContainer = document.getElementById('stats');
+            const statItems = statsContainer.children;
+            
+            statItems[0].querySelector('.stat-value').textContent = statData.year_range.total_count;
+            statItems[1].querySelector('.stat-value').textContent = `${statData.year_range.min}-${statData.year_range.max}`;
+            statItems[2].querySelector('.stat-value').textContent = `10¹-10¹²`;
+            statItems[3].querySelector('.stat-value').textContent = statData.domain_distribution.length;
+        }
+
+        function initChart(chartData, statData) {
+            const chartDom = document.getElementById('chart');
+            const myChart = echarts.init(chartDom);
+
+            // 定义颜色方案
+            const colors = [
+                '#5470c6', '#91cc75', '#fac858', '#ee6666', 
+                '#73c0de', '#3ba272', '#fc8452', '#9a60b4', 
+                '#ea7ccc', '#d2691e'
+            ];
+
+            // 准备系列数据
+            const series = chartData.series.map((serie, index) => ({
+                name: serie.name,
+                type: 'scatter',
+                data: serie.data,
+                symbolSize: function(data) {
+                    // 根据置信度和前沿模型状态调整点的大小
+                    const baseSize = 8;
+                    const info = data[2];
+                    let size = baseSize;
+                    
+                    if (info.frontier_model === 1) {
+                        size += 4; // 前沿模型更大
+                    }
+                    
+                    return size;
+                },
+                itemStyle: {
+                    color: colors[index % colors.length],
+                    opacity: 0.8
+                },
+                emphasis: {
+                    focus: 'series',
+                    itemStyle: {
+                        borderColor: '#333',
+                        borderWidth: 2
+                    }
+                }
+            }));
+
+            const option = {
+                title: {
+                    text: 'AI 模型参数规模演进',
+                    subtext: '参数数量对数值 vs 发布年份',
+                    left: 'center',
+                    textStyle: {
+                        fontSize: 20,
+                        fontWeight: 'bold'
+                    },
+                    subtextStyle: {
+                        fontSize: 14,
+                        color: '#666'
+                    }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function(params) {
+                        const data = params.data;
+                        const info = data[2];
+                        const paramCount = info.parameters;
+                        const paramStr = paramCount >= 1e9 ? 
+                            `${(paramCount / 1e9).toFixed(1)}B` : 
+                            paramCount >= 1e6 ? 
+                            `${(paramCount / 1e6).toFixed(1)}M` : 
+                            paramCount >= 1e3 ? 
+                            `${(paramCount / 1e3).toFixed(1)}K` : 
+                            paramCount.toString();
+                        
+                        return `
+                            <div style="padding: 10px;">
+                                <div style="font-weight: bold; font-size: 16px; margin-bottom: 8px;">${info.model}</div>
+                                <div><strong>发布年份:</strong> ${data[0]}</div>
+                                <div><strong>参数数量:</strong> ${paramStr} (${paramCount.toLocaleString()})</div>
+                                <div><strong>领域:</strong> ${info.domain}</div>
+                                <div><strong>组织:</strong> ${info.organization || '未知'}</div>
+                                ${info.confidence ? `<div><strong>置信度:</strong> ${info.confidence}</div>` : ''}
+                                ${info.frontier_model === 1 ? '<div style="color: #ff6b6b;"><strong>★ 前沿模型</strong></div>' : ''}
+                            </div>
+                        `;
+                    },
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    borderColor: '#ccc',
+                    borderWidth: 1,
+                    textStyle: {
+                        color: '#333'
+                    }
+                },
+                legend: {
+                    type: 'scroll',
+                    orient: 'horizontal',
+                    bottom: 10,
+                    left: 'center',
+                    textStyle: {
+                        fontSize: 12
+                    }
+                },
+                grid: {
+                    left: '10%',
+                    right: '10%',
+                    top: '15%',
+                    bottom: '20%'
+                },
+                xAxis: {
+                    type: 'value',
+                    name: '发布年份',
+                    nameLocation: 'middle',
+                    nameGap: 30,
+                    min: statData.year_range.min - 5,
+                    max: statData.year_range.max + 5,
+                    axisLabel: {
+                        formatter: '{value}'
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'dashed',
+                            opacity: 0.3
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '参数数量 (log₁₀)',
+                    nameLocation: 'middle',
+                    nameGap: 50,
+                    min: 0,
+                    max: 13,
+                    axisLabel: {
+                        formatter: function(value) {
+                            return `10^${value}`;
+                        }
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'dashed',
+                            opacity: 0.3
+                        }
+                    }
+                },
+                series: series,
+                toolbox: {
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: false
+                        },
+                        brush: {
+                            type: ['rect', 'polygon', 'clear']
+                        },
+                        saveAsImage: {
+                            name: 'AI模型参数规模演进图'
+                        }
+                    }
+                },
+                dataZoom: [
+                    {
+                        type: 'inside',
+                        xAxisIndex: 0
+                    },
+                    {
+                        type: 'inside',
+                        yAxisIndex: 0
+                    },
+                    {
+                        type: 'slider',
+                        xAxisIndex: 0,
+                        bottom: 60
+                    }
+                ],
+                animation: true,
+                animationDuration: 1000,
+                animationEasing: 'cubicOut'
+            };
+
+            myChart.setOption(option);
+
+            // 响应式调整
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+
+            // 添加点击事件
+            myChart.on('click', function(params) {
+                const info = params.data[2];
+                console.log('点击的模型:', info);
+            });
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', loadDataAndInitChart);
+    </script>
+</body>
+</html> 
