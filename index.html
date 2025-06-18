@@ -93,9 +93,34 @@
             color: #666;
             font-size: 14px;
         }
+        .github-link {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .github-link:hover {
+            background: #24292e;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+        .github-link::before {
+            content: "⭐";
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
+    <a href="https://github.com/aidoge-lab/DeepSight-AI" target="_blank" class="github-link">GitHub</a>
     <div class="container">
         <div class="header">
             <h1 class="title">DeepSight AI</h1>
