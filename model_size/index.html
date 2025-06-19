@@ -78,6 +78,243 @@
             font-size: 14px;
             color: #666;
         }
+        
+        /* Data Table Styles */
+        .table-section {
+            margin-top: 40px;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .table-title {
+            color: #333;
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .table-controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .search-input, .domain-filter, .year-filter {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            color: #333;
+            font-size: 14px;
+            min-width: 150px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus, .domain-filter:focus, .year-filter:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0,123,255,0.3);
+            transform: translateY(-1px);
+        }
+        
+        .table-info {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .table-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            background: transparent;
+        }
+        
+        .data-table thead {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+        }
+        
+        .data-table th {
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #3498db;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .data-table th.sortable:hover {
+            background: rgba(52, 152, 219, 0.2);
+        }
+        
+        .sort-arrow {
+            float: right;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+        
+        .data-table th.sorted .sort-arrow {
+            opacity: 1;
+            color: #3498db;
+        }
+        
+        .data-table tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .data-table tbody tr:nth-child(even) {
+            background: rgba(0,0,0,0.02);
+        }
+        
+        .data-table tbody tr:hover {
+            background: linear-gradient(90deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
+            transform: translateX(3px);
+            box-shadow: 3px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            vertical-align: middle;
+        }
+        
+        .model-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .organization-name {
+            color: #7f8c8d;
+            font-size: 13px;
+        }
+        
+        .parameter-count {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #27ae60;
+        }
+        
+        .domain-tag {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            margin: 2px;
+        }
+        
+        .confidence-tag {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+        
+        .confidence-confident { background: #d5f4e6; color: #27ae60; }
+        .confidence-likely { background: #fff3cd; color: #856404; }
+        .confidence-speculative { background: #f8d7da; color: #721c24; }
+        .confidence-unknown { background: #e2e3e5; color: #6c757d; }
+        
+        .frontier-badge {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            text-align: center;
+            line-height: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .page-btn {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: #333;
+        }
+        
+        .page-btn:hover:not(:disabled) {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        #pageInfo {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .table-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .table-controls {
+                justify-content: center;
+            }
+            
+            .data-table {
+                font-size: 12px;
+            }
+            
+            .data-table th, .data-table td {
+                padding: 8px 6px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -122,9 +359,62 @@
             <strong>Data Source:</strong> Historical AI model data from the ai_insights.db database.
             Y-axis uses logarithmic scale to better display the huge range from dozens to trillions of parameters.
         </div>
+
+        <!-- Data Table Section -->
+        <div class="table-section">
+            <div class="table-header">
+                <h2 class="table-title">AI Models Database</h2>
+                <div class="table-controls">
+                    <input type="text" id="searchInput" placeholder="Search models..." class="search-input">
+                    <select id="domainFilter" class="domain-filter">
+                        <option value="">All Domains</option>
+                    </select>
+                    <select id="yearFilter" class="year-filter">
+                        <option value="">All Years</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="table-info">
+                <span id="tableInfo">Showing 0 of 0 models</span>
+            </div>
+            
+            <div class="table-container">
+                <table id="dataTable" class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable" data-column="year">Year <span class="sort-arrow">↕</span></th>
+                            <th class="sortable" data-column="model">Model <span class="sort-arrow">↕</span></th>
+                            <th class="sortable" data-column="organization">Organization <span class="sort-arrow">↕</span></th>
+                            <th class="sortable" data-column="parameters">Parameters <span class="sort-arrow">↕</span></th>
+                            <th class="sortable" data-column="domain">Domain <span class="sort-arrow">↕</span></th>
+                            <th>Confidence</th>
+                            <th>Frontier</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pagination">
+                <button id="prevPage" class="page-btn">← Previous</button>
+                <span id="pageInfo">Page 1 of 1</span>
+                <button id="nextPage" class="page-btn">Next →</button>
+            </div>
+        </div>
     </div>
 
     <script>
+        // Global variables for table functionality
+        let allTableData = [];
+        let filteredTableData = [];
+        let currentPage = 1;
+        const itemsPerPage = 1000;
+        let currentSortColumn = '';
+        let currentSortDirection = 'asc';
+
         // Load data and initialize chart
         async function loadDataAndInitChart() {
             try {
@@ -142,6 +432,9 @@
                 
                 // Initialize chart
                 initChart(chartData, statData);
+                
+                // Initialize table
+                initTable(chartData);
                 
             } catch (error) {
                 console.error('Failed to load data:', error);
@@ -346,6 +639,233 @@
                 const info = params.data[2];
                 console.log('Clicked model:', info);
             });
+        }
+
+        // Initialize table
+        function initTable(chartData) {
+            // Flatten all data from all series
+            allTableData = [];
+            chartData.series.forEach(serie => {
+                serie.data.forEach(dataPoint => {
+                    const [year, logParams, info] = dataPoint;
+                    allTableData.push({
+                        year: year,
+                        model: info.model,
+                        organization: info.organization || 'Unknown',
+                        parameters: info.parameters,
+                        domain: info.domain,
+                        confidence: info.confidence,
+                        frontier_model: info.frontier_model
+                    });
+                });
+            });
+            
+            // Initialize filters
+            initFilters();
+            
+            // Set initial filtered data
+            filteredTableData = [...allTableData];
+            
+            // Render table
+            renderTable();
+            
+            // Setup event listeners
+            setupTableEventListeners();
+        }
+        
+        function initFilters() {
+            // Define specific domains
+            const domains = ['Other', 'Vision', 'Mathematics', 'Language', 'Video', 'Multimodal', 'Audio'];
+            const years = [...new Set(allTableData.map(item => item.year))].sort((a, b) => b - a);
+            
+            // Populate domain filter
+            const domainFilter = document.getElementById('domainFilter');
+            domains.forEach(domain => {
+                const option = document.createElement('option');
+                option.value = domain;
+                option.textContent = domain;
+                domainFilter.appendChild(option);
+            });
+            
+            // Populate year filter (group by decades)
+            const yearFilter = document.getElementById('yearFilter');
+            const decades = [];
+            for (let decade = Math.floor(Math.min(...years) / 10) * 10; decade <= Math.max(...years); decade += 10) {
+                decades.push(`${decade}s`);
+            }
+            decades.forEach(decade => {
+                const option = document.createElement('option');
+                option.value = decade;
+                option.textContent = decade;
+                yearFilter.appendChild(option);
+            });
+        }
+        
+        function setupTableEventListeners() {
+            // Search input
+            document.getElementById('searchInput').addEventListener('input', handleSearch);
+            
+            // Filters
+            document.getElementById('domainFilter').addEventListener('change', applyFilters);
+            document.getElementById('yearFilter').addEventListener('change', applyFilters);
+            
+            // Sorting
+            document.querySelectorAll('.sortable').forEach(th => {
+                th.addEventListener('click', () => handleSort(th.dataset.column));
+            });
+            
+            // Pagination
+            document.getElementById('prevPage').addEventListener('click', () => changePage(-1));
+            document.getElementById('nextPage').addEventListener('click', () => changePage(1));
+        }
+        
+        function handleSearch() {
+            applyFilters();
+        }
+        
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const selectedDomain = document.getElementById('domainFilter').value;
+            const selectedDecade = document.getElementById('yearFilter').value;
+            
+            filteredTableData = allTableData.filter(item => {
+                // Search filter
+                const matchesSearch = !searchTerm || 
+                    item.model.toLowerCase().includes(searchTerm) ||
+                    item.organization.toLowerCase().includes(searchTerm) ||
+                    item.domain.toLowerCase().includes(searchTerm);
+                
+                // Domain filter - use string contains match
+                const matchesDomain = !selectedDomain || item.domain.includes(selectedDomain);
+                
+                // Year filter
+                const matchesYear = !selectedDecade || 
+                    (Math.floor(item.year / 10) * 10).toString() + 's' === selectedDecade;
+                
+                return matchesSearch && matchesDomain && matchesYear;
+            });
+            
+            currentPage = 1;
+            renderTable();
+        }
+        
+        function handleSort(column) {
+            if (currentSortColumn === column) {
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortColumn = column;
+                currentSortDirection = 'asc';
+            }
+            
+            filteredTableData.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+                
+                if (column === 'parameters') {
+                    aVal = Number(aVal);
+                    bVal = Number(bVal);
+                } else if (typeof aVal === 'string') {
+                    aVal = aVal.toLowerCase();
+                    bVal = bVal.toLowerCase();
+                }
+                
+                if (aVal < bVal) return currentSortDirection === 'asc' ? -1 : 1;
+                if (aVal > bVal) return currentSortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            updateSortIndicators();
+            renderTable();
+        }
+        
+        function updateSortIndicators() {
+            document.querySelectorAll('.sortable').forEach(th => {
+                th.classList.remove('sorted');
+                const arrow = th.querySelector('.sort-arrow');
+                arrow.textContent = '↕';
+            });
+            
+            if (currentSortColumn) {
+                const sortedTh = document.querySelector(`[data-column="${currentSortColumn}"]`);
+                sortedTh.classList.add('sorted');
+                const arrow = sortedTh.querySelector('.sort-arrow');
+                arrow.textContent = currentSortDirection === 'asc' ? '↑' : '↓';
+            }
+        }
+        
+        function changePage(direction) {
+            const totalPages = Math.ceil(filteredTableData.length / itemsPerPage);
+            const newPage = currentPage + direction;
+            
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                renderTable();
+            }
+        }
+        
+        function renderTable() {
+            const tableBody = document.getElementById('tableBody');
+            const totalPages = Math.ceil(filteredTableData.length / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, filteredTableData.length);
+            const pageData = filteredTableData.slice(startIndex, endIndex);
+            
+            // Clear table body
+            tableBody.innerHTML = '';
+            
+            // Add rows
+            pageData.forEach(item => {
+                const row = document.createElement('tr');
+                
+                // Format parameter count
+                const paramCount = item.parameters;
+                const paramStr = paramCount >= 1e9 ? 
+                    `${(paramCount / 1e9).toFixed(1)}B` : 
+                    paramCount >= 1e6 ? 
+                    `${(paramCount / 1e6).toFixed(1)}M` : 
+                    paramCount >= 1e3 ? 
+                    `${(paramCount / 1e3).toFixed(1)}K` : 
+                    paramCount.toString();
+                
+                // Format confidence
+                const confidence = item.confidence || 'Unknown';
+                const confidenceClass = `confidence-${confidence.toLowerCase().replace(/\s+/g, '-')}`;
+                
+                // Format domains (handle multiple domains separated by comma)
+                const domains = item.domain.split(',').map(d => d.trim());
+                const domainTags = domains.map(domain => `<span class="domain-tag">${domain}</span>`).join(' ');
+                
+                row.innerHTML = `
+                    <td>${item.year}</td>
+                    <td><div class="model-name">${item.model}</div></td>
+                    <td><div class="organization-name">${item.organization}</div></td>
+                    <td><span class="parameter-count">${paramStr}</span><br><small>(${paramCount.toLocaleString()})</small></td>
+                    <td>${domainTags}</td>
+                    <td><span class="confidence-tag ${confidenceClass}">${confidence}</span></td>
+                    <td>${item.frontier_model === 1 ? '<span class="frontier-badge">★</span>' : ''}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Update table info and pagination
+            updateTableInfo();
+            updatePagination();
+        }
+        
+        function updateTableInfo() {
+            const tableInfo = document.getElementById('tableInfo');
+            const startIndex = (currentPage - 1) * itemsPerPage + 1;
+            const endIndex = Math.min(currentPage * itemsPerPage, filteredTableData.length);
+            tableInfo.textContent = `Showing ${startIndex}-${endIndex} of ${filteredTableData.length} models`;
+        }
+        
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredTableData.length / itemsPerPage);
+            
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages || totalPages === 0;
+            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
         }
 
         // Initialize after page load
