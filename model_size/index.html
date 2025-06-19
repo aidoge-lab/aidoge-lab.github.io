@@ -339,7 +339,7 @@
             </div>
             <div class="stat-item">
                 <div class="stat-value">-</div>
-                <div class="stat-label">Domain Count</div>
+                <div class="stat-label">Average Annual Growth Rate</div>
             </div>
         </div>
 
@@ -446,10 +446,16 @@
             const statsContainer = document.getElementById('stats');
             const statItems = statsContainer.children;
             
-            statItems[0].querySelector('.stat-value').textContent = statData.year_range.total_count;
+            statItems[0].querySelector('.stat-value').textContent = statData.parameter_range.total_count;
             statItems[1].querySelector('.stat-value').textContent = `${statData.year_range.min}-${statData.year_range.max}`;
             statItems[2].querySelector('.stat-value').textContent = `10¹-10¹²`;
-            statItems[3].querySelector('.stat-value').textContent = statData.domain_distribution.length;
+            // Display all growth rates together
+            statItems[3].querySelector('.stat-value').innerHTML = `
+                <div style="font-size: 14px; line-height: 1.2;">
+                    <div>Recent Years: ~84%</div>
+                    <div>All Period: ~36%</div>
+                </div>
+            `;
         }
 
         function initChart(chartData, statData) {
