@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Model Parameters vs Training Dataset Size</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .header p {
+            color: #666;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        .chart-container {
+            width: 100%;
+            height: 700px;
+            margin: 20px 0;
+        }
+        .info-panel {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+        .info-item {
+            text-align: center;
+        }
+        .info-item .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .info-item .label {
+            font-size: 14px;
+            color: #666;
+        }
+        .legend-note {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #495057;
+        }
+        .legend-note strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AI Model Parameters vs Training Dataset Size Analysis</h1>
+            <p>Scatter plot showing the relationship between model parameter count and training dataset size</p>
+            <p>Both axes use logarithmic scale (log10) to handle the wide range of values</p>
+        </div>
+        
+        <div class="info-panel">
+            <div class="info-item">
+                <div class="value" id="total-models">612</div>
+                <div class="label">Total Models</div>
+            </div>
+            <div class="info-item">
+                <div class="value" id="total-domains">15</div>
+                <div class="label">Domains</div>
+            </div>
+            <div class="info-item">
+                <div class="value">10 - 2T</div>
+                <div class="label">Parameter Range</div>
+            </div>
+            <div class="info-item">
+                <div class="value">4 - 30T</div>
+                <div class="label">Dataset Size Range</div>
+            </div>
+        </div>
+
+        <div id="scatter-chart" class="chart-container"></div>
+        
+        <div class="legend-note">
+            <strong>Note:</strong> 
+            X-axis represents model parameters (log10 scale), Y-axis represents training dataset size in datapoints (log10 scale). 
+            Each point represents an AI model, colored by domain. Hover over points to see detailed information.
+            <br><br>
+            <strong>Scale Reference:</strong> 
+            X-axis: 1=10 params, 6=1M params, 9=1B params, 12=1T params | 
+            Y-axis: 3=1K datapoints, 6=1M datapoints, 9=1B datapoints, 12=1T datapoints
+        </div>
+    </div>
+
+    <script>
+        // Load data and create chart
+        fetch('./data.json')
+            .then(response => response.json())
+            .then(data => {
+                createScatterChart(data);
+            })
+            .catch(error => {
+                console.error('Error loading data:', error);
+            });
+
+        function createScatterChart(data) {
+            const chartDom = document.getElementById('scatter-chart');
+            const myChart = echarts.init(chartDom);
+
+            // Generate colors for different domains
+            const colors = [
+                '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de',
+                '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc', '#d4a574',
+                '#5fb3d3', '#b5bd48', '#d87a80', '#8d98b3', '#e87c25'
+            ];
+
+            // Prepare series data with colors
+            const series = data.series.map((seriesItem, index) => ({
+                ...seriesItem,
+                symbolSize: 8,
+                itemStyle: {
+                    color: colors[index % colors.length],
+                    opacity: 0.7
+                },
+                emphasis: {
+                    itemStyle: {
+                        opacity: 1,
+                        borderColor: '#000',
+                        borderWidth: 1
+                    }
+                }
+            }));
+
+            const option = {
+                title: {
+                    text: 'AI Model Parameters vs Training Dataset Size',
+                    left: 'center',
+                    textStyle: {
+                        fontSize: 18,
+                        fontWeight: 'bold'
+                    }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function(params) {
+                        const data = params.data;
+                        const logParams = data.value[0];
+                        const logDataset = data.value[1];
+                        const params_formatted = formatNumber(data.parameters);
+                        const dataset_formatted = formatNumber(data.training_dataset_size_datapoints);
+                        
+                        return `
+                            <strong>${data.name}</strong><br/>
+                            <strong>Domain:</strong> ${params.seriesName}<br/>
+                            <strong>Organization:</strong> ${data.organization || 'Unknown'}<br/>
+                            <strong>Parameters:</strong> ${params_formatted}<br/>
+                            <strong>Training Dataset:</strong> ${dataset_formatted} datapoints<br/>
+                            <strong>Publication Date:</strong> ${data.publication_date || 'Unknown'}<br/>
+                            <strong>Confidence:</strong> ${data.confidence || 'Unknown'}
+                        `;
+                    }
+                },
+                legend: {
+                    type: 'scroll',
+                    orient: 'horizontal',
+                    bottom: 10,
+                    data: data.domains
+                },
+                xAxis: {
+                    type: 'value',
+                    name: 'Model Parameters (log10)',
+                    nameLocation: 'middle',
+                    nameGap: 30,
+                    min: 0,
+                    max: 13,
+                    interval: 1,
+                    axisLabel: {
+                        formatter: function(value) {
+                            const labels = {
+                                0: '1', 1: '10', 2: '100', 3: '1K',
+                                4: '10K', 5: '100K', 6: '1M', 7: '10M',
+                                8: '100M', 9: '1B', 10: '10B', 11: '100B',
+                                12: '1T', 13: '10T'
+                            };
+                            return labels[value] || `10^${value}`;
+                        }
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'dashed',
+                            opacity: 0.3
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Training Dataset Size (log10)',
+                    nameLocation: 'middle',
+                    nameGap: 50,
+                    min: 0,
+                    max: 16,
+                    interval: 1,
+                    axisLabel: {
+                        formatter: function(value) {
+                            const labels = {
+                                0: '1', 1: '10', 2: '100', 3: '1K',
+                                4: '10K', 5: '100K', 6: '1M', 7: '10M',
+                                8: '100M', 9: '1B', 10: '10B', 11: '100B',
+                                12: '1T', 13: '10T', 14: '100T', 15: '1P', 16: '10P'
+                            };
+                            return labels[value] || `10^${value}`;
+                        }
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'dashed',
+                            opacity: 0.3
+                        }
+                    }
+                },
+                series: series,
+                grid: {
+                    left: '10%',
+                    right: '10%',
+                    bottom: '15%',
+                    top: '10%',
+                    containLabel: true
+                },
+                animation: true,
+                animationDuration: 1000
+            };
+
+            myChart.setOption(option);
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+
+            // Update info panel
+            document.getElementById('total-models').textContent = data.total_models;
+            document.getElementById('total-domains').textContent = data.domains.length;
+        }
+
+        function formatNumber(num) {
+            if (num >= 1e12) {
+                return (num / 1e12).toFixed(1) + 'T';
+            } else if (num >= 1e9) {
+                return (num / 1e9).toFixed(1) + 'B';
+            } else if (num >= 1e6) {
+                return (num / 1e6).toFixed(1) + 'M';
+            } else if (num >= 1e3) {
+                return (num / 1e3).toFixed(1) + 'K';
+            } else {
+                return num.toString();
+            }
+        }
+    </script>
+</body>
+</html> 

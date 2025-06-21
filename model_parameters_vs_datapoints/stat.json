@@ -1,0 +1,26 @@
+{
+  "basic_stats": {
+    "parameters": {
+      "total_count": 612,
+      "min_value": 10,
+      "max_value": 2000000000000,
+      "avg_value": 55607464683,
+      "median_value": 0
+    },
+    "training_dataset_size_datapoints": {
+      "total_count": 612,
+      "min_value": 4,
+      "max_value": 30000000000000,
+      "avg_value": 982642216693,
+      "median_value": 0
+    },
+    "domain_distribution": {
+      "total_count": 612,
+      "min_value": 39,
+      "max_value": 0,
+      "avg_value": 0,
+      "median_value": 0
+    }
+  },
+  "domain_breakdown": []
+}
