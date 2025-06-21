@@ -248,6 +248,19 @@
                     top: '10%',
                     containLabel: true
                 },
+                toolbox: {
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: false
+                        },
+                        brush: {
+                            type: ['rect', 'polygon', 'clear']
+                        },
+                        saveAsImage: {
+                            name: 'AI_Model_Parameters_vs_Training_Dataset_Size'
+                        }
+                    }
+                },
                 animation: true,
                 animationDuration: 1000
             };
