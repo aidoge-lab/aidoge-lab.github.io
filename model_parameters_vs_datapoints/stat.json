@@ -1,26 +1,32 @@
-{
-  "basic_stats": {
-    "parameters": {
-      "total_count": 612,
-      "min_value": 10,
-      "max_value": 2000000000000,
-      "avg_value": 55607464683,
-      "median_value": 0
-    },
-    "training_dataset_size_datapoints": {
-      "total_count": 612,
-      "min_value": 4,
-      "max_value": 30000000000000,
-      "avg_value": 982642216693,
-      "median_value": 0
-    },
-    "domain_distribution": {
-      "total_count": 612,
-      "min_value": 39,
-      "max_value": 0,
-      "avg_value": 0,
-      "median_value": 0
-    }
+[
+  {
+    "analysis_type": "Era 1: Classical ML (Before 2012)",
+    "total_count": 61,
+    "min_value": 10,
+    "max_value": 300000000000,
+    "avg_value": 5273722098.409836,
+    "min_log10": 1.0,
+    "max_log10": 11.477121254719663,
+    "avg_log10": 5.022149389314645
   },
-  "domain_breakdown": []
-}
+  {
+    "analysis_type": "Era 2: Deep Learning (2012-2017)",
+    "total_count": 43,
+    "min_value": 13040,
+    "max_value": 1920000000,
+    "avg_value": 196753923.97674417,
+    "min_log10": 4.115277591395901,
+    "max_log10": 9.28330122870355,
+    "avg_log10": 7.5234773918512525
+  },
+  {
+    "analysis_type": "Era 3: Transformer (2017+)",
+    "total_count": 508,
+    "min_value": 8720,
+    "max_value": 2000000000000,
+    "avg_value": 66341753778.91535,
+    "min_log10": 3.940516484932567,
+    "max_log10": 12.301029995663981,
+    "avg_log10": 9.331689347455058
+  }
+]

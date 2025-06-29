@@ -1,156 +1,208 @@
 #!/usr/bin/env python3
 """
-AI Model Parameters vs Training Dataset Size Data Extraction
-This script executes SQL queries and generates JSON data for ECharts visualization.
+Data extraction script for AI model parameters vs training dataset size analysis.
+This script executes SQL queries and generates ECharts-compatible JSON data.
+
+Usage:
+    python extract.py [database_path]
+    
+Default database path: ../../db/ai_insights.db
 """
 
 import sqlite3
 import json
-import sys
-import os
-from pathlib import Path
 import math
+import os
+import sys
+from pathlib import Path
 
-def read_sql_file(file_path):
-    """Read SQL query from file"""
-    with open(file_path, 'r', encoding='utf-8') as f:
-        return f.read()
-
-def execute_query(cursor, query):
-    """Execute SQL query and return results"""
-    try:
-        cursor.execute(query)
-        columns = [description[0] for description in cursor.description]
-        results = cursor.fetchall()
-        return [dict(zip(columns, row)) for row in results]
-    except Exception as e:
-        print(f"Error executing query: {e}")
-        return []
-
-def process_domain(domain_str):
-    """Process domain string to get primary domain"""
-    if not domain_str:
-        return "Unknown"
-    # Split by comma and take the first domain
-    return domain_str.split(',')[0].strip()
-
-def prepare_echarts_data(raw_data):
-    """Convert raw data to ECharts scatter plot format"""
-    # Group data by domain
-    domain_data = {}
+def execute_sql_file(cursor, sql_file_path):
+    """Execute SQL queries from a file and return results."""
+    with open(sql_file_path, 'r', encoding='utf-8') as f:
+        sql_content = f.read()
     
-    for record in raw_data:
-        domain = process_domain(record.get('domain'))
+    # For single queries, execute directly
+    if 'UNION ALL' not in sql_content:
+        cursor.execute(sql_content)
+        return cursor.fetchall()
+    
+    # For UNION ALL queries, execute as a single statement
+    try:
+        cursor.execute(sql_content)
+        return cursor.fetchall()
+    except Exception as e:
+        # If UNION ALL fails, try splitting and executing separately
+        print(f"Trying alternative execution method due to: {e}")
+        queries = [query.strip() for query in sql_content.split('UNION ALL')]
+        all_results = []
+        for query in queries:
+            if query.strip():
+                cursor.execute(query)
+                all_results.extend(cursor.fetchall())
+        return all_results
+
+def generate_echarts_data(raw_data):
+    """Convert raw SQL data to ECharts scatter plot format."""
+    
+    # Group data by era
+    era_data = {}
+    
+    for row in raw_data:
+        model, org, params, dataset_size, pub_date, era, params_real, dataset_real = row
         
-        if domain not in domain_data:
-            domain_data[domain] = []
+        if era not in era_data:
+            era_data[era] = []
         
-        # Convert to log10 for both axes
-        params = record.get('parameters', 0)
-        dataset_size = record.get('training_dataset_size_datapoints', 0)
-        
-        if params > 0 and dataset_size > 0:
-            log_params = math.log10(params)
-            log_dataset_size = math.log10(dataset_size)
+        # Calculate log10 values for plotting
+        try:
+            log_params = math.log10(params_real) if params_real and params_real > 0 else None
+            log_dataset = math.log10(dataset_real) if dataset_real and dataset_real > 0 else None
             
-            domain_data[domain].append({
-                'value': [log_params, log_dataset_size],
-                'name': record.get('model', ''),
-                'organization': record.get('organization', ''),
-                'parameters': params,
-                'training_dataset_size_datapoints': dataset_size,
-                'publication_date': record.get('publication_date', ''),
-                'confidence': record.get('confidence', '')
-            })
+            if log_params is not None and log_dataset is not None:
+                era_data[era].append({
+                    'value': [log_params, log_dataset],
+                    'name': model,
+                    'organization': org,
+                    'parameters': int(params_real),
+                    'dataset_size': int(dataset_real),
+                    'publication_date': pub_date
+                })
+        except (ValueError, TypeError):
+            # Skip invalid data points
+            continue
     
     # Convert to ECharts series format
-    series = []
-    for domain, data_points in domain_data.items():
-        series.append({
-            'name': domain,
-            'type': 'scatter',
-            'data': data_points
-        })
-    
-    return {
-        'series': series,
-        'domains': list(domain_data.keys()),
-        'total_models': sum(len(data) for data in domain_data.values())
+    series_data = []
+    colors = {
+        'Era 1: Classical ML (Before 2012)': '#5470c6',
+        'Era 2: Deep Learning (2012-2017)': '#91cc75', 
+        'Era 3: Transformer (2017+)': '#fac858',
+        'Unknown Era': '#ee6666'
     }
-
-def prepare_stat_data(raw_stat_data):
-    """Process statistical data"""
-    stats = {}
-    domain_breakdown = []
     
-    for record in raw_stat_data:
-        if 'analysis_type' in record and record['analysis_type'] == 'domain_breakdown':
-            domain_breakdown.append(record)
-        elif 'metric' in record:
-            stats[record['metric']] = {
-                'total_count': record.get('total_count', 0),
-                'min_value': record.get('min_value', 0),
-                'max_value': record.get('max_value', 0),
-                'avg_value': record.get('avg_value', 0),
-                'median_value': record.get('median_value', 0)
-            }
+    for era, data_points in era_data.items():
+        if data_points:  # Only include eras with data
+            series_data.append({
+                'name': era,
+                'type': 'scatter',
+                'data': data_points,
+                'itemStyle': {
+                    'color': colors.get(era, '#73c0de')
+                },
+                'symbolSize': 8,
+                'emphasis': {
+                    'itemStyle': {
+                        'borderColor': '#000',
+                        'borderWidth': 1
+                    }
+                }
+            })
     
-    return {
-        'basic_stats': stats,
-        'domain_breakdown': domain_breakdown
+    # Create complete ECharts configuration
+    echarts_config = {
+        'title': {
+            'text': 'AI Model Parameters vs Training Dataset Size',
+            'subtext': 'Logarithmic scale comparison across different eras',
+            'left': 'center'
+        },
+                 'tooltip': {
+             'trigger': 'item',
+             'formatter': 'function(params) { const data = params.data; const params_formatted = (data.parameters / 1e9).toFixed(1) + "B"; const dataset_formatted = (data.dataset_size / 1e12).toFixed(1) + "T"; return data.name + "<br/>" + "Organization: " + (data.organization || "Unknown") + "<br/>" + "Parameters: " + params_formatted + "<br/>" + "Dataset Size: " + dataset_formatted + " tokens<br/>" + "Date: " + (data.publication_date || "Unknown"); }'
+         },
+        'legend': {
+            'data': [era for era in era_data.keys() if era_data[era]],
+            'top': '8%'
+        },
+                 'xAxis': {
+             'type': 'log',
+             'name': 'Model Parameters (log10)',
+             'nameLocation': 'center',
+             'nameGap': 35,
+             'axisLabel': {
+                 'formatter': 'function(value) { return Math.pow(10, value).toExponential(0); }'
+             },
+             'splitLine': {
+                 'show': True
+             }
+         },
+         'yAxis': {
+             'type': 'log', 
+             'name': 'Training Dataset Size (log10)',
+             'nameLocation': 'center',
+             'nameGap': 50,
+             'axisLabel': {
+                 'formatter': 'function(value) { return Math.pow(10, value).toExponential(0); }'
+             },
+             'splitLine': {
+                 'show': True
+             }
+         },
+        'series': series_data,
+        'grid': {
+            'left': '12%',
+            'right': '8%',
+            'bottom': '15%',
+            'top': '20%'
+        }
     }
+    
+    return echarts_config
 
 def main():
-    """Main execution function"""
-    if len(sys.argv) != 2:
-        print("Usage: python extract.py <database_path>")
+    # Determine database path
+    if len(sys.argv) > 1:
+        db_path = sys.argv[1]
+    else:
+        script_dir = Path(__file__).parent
+        db_path = script_dir / "../../db/ai_insights.db"
+    
+    if not os.path.exists(db_path):
+        print(f"Error: Database file not found at {db_path}")
         sys.exit(1)
     
-    db_path = sys.argv[1]
+    # File paths
     script_dir = Path(__file__).parent
-    
-    # Define file paths
     extract_sql_path = script_dir / "extract.sql"
     stat_sql_path = script_dir / "stat.sql"
     data_json_path = script_dir / "data.json"
     stat_json_path = script_dir / "stat.json"
     
-    # Check if SQL files exist
-    if not extract_sql_path.exists():
-        print(f"Error: {extract_sql_path} not found")
-        sys.exit(1)
-    
-    if not stat_sql_path.exists():
-        print(f"Error: {stat_sql_path} not found")
-        sys.exit(1)
-    
-    # Connect to database
     try:
+        # Connect to database
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         
-        # Read and execute extract query
-        extract_query = read_sql_file(extract_sql_path)
-        print("Executing data extraction query...")
-        raw_data = execute_query(cursor, extract_query)
-        print(f"Extracted {len(raw_data)} records")
+        # Execute extract SQL
+        print("Executing extract SQL...")
+        raw_data = execute_sql_file(cursor, extract_sql_path)
+        print(f"Retrieved {len(raw_data)} records")
         
-        # Process data for ECharts
-        echarts_data = prepare_echarts_data(raw_data)
+        # Generate ECharts data
+        print("Generating ECharts data...")
+        echarts_data = generate_echarts_data(raw_data)
         
         # Save data.json
         with open(data_json_path, 'w', encoding='utf-8') as f:
             json.dump(echarts_data, f, indent=2, ensure_ascii=False)
         print(f"Data saved to {data_json_path}")
         
-        # Read and execute stat query
-        stat_query = read_sql_file(stat_sql_path)
-        print("Executing statistical analysis query...")
-        raw_stat_data = execute_query(cursor, stat_query)
-        print(f"Generated {len(raw_stat_data)} statistical records")
+        # Execute statistics SQL
+        print("Executing statistics SQL...")
+        stat_results = execute_sql_file(cursor, stat_sql_path)
         
-        # Process statistical data
-        stat_data = prepare_stat_data(raw_stat_data)
+        # Convert statistics to JSON format
+        stat_data = []
+        for row in stat_results:
+            stat_data.append({
+                'analysis_type': row[0],
+                'total_count': row[1],
+                'min_value': row[2],
+                'max_value': row[3],
+                'avg_value': row[4],
+                'min_log10': row[5] if len(row) > 5 else None,
+                'max_log10': row[6] if len(row) > 6 else None,
+                'avg_log10': row[7] if len(row) > 7 else None
+            })
         
         # Save stat.json
         with open(stat_json_path, 'w', encoding='utf-8') as f:
@@ -158,19 +210,18 @@ def main():
         print(f"Statistics saved to {stat_json_path}")
         
         # Print summary
-        print("\nData Extraction Summary:")
-        print(f"- Total models: {echarts_data['total_models']}")
-        print(f"- Domains found: {len(echarts_data['domains'])}")
-        print(f"- Domain list: {', '.join(echarts_data['domains'])}")
+        print("\n=== Extraction Summary ===")
+        print(f"Total data points: {len(raw_data)}")
+        series_count = len([s for s in echarts_data['series'] if s['data']])
+        print(f"Series count: {series_count}")
+        for series in echarts_data['series']:
+            print(f"  {series['name']}: {len(series['data'])} points")
         
-    except sqlite3.Error as e:
-        print(f"Database error: {e}")
-        sys.exit(1)
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        print(f"Error: {e}")
         sys.exit(1)
     finally:
-        if conn:
+        if 'conn' in locals():
             conn.close()
 
 if __name__ == "__main__":

@@ -1,51 +1,31 @@
--- Statistical analysis for AI model parameters vs training dataset size
--- This query provides insights for chart design
+-- Statistical analysis for model parameters vs training dataset size
+-- This query provides insights for chart design (axis ranges, series counts, etc.)
 
--- Basic statistics for parameters
+-- Combined statistics including era-based distribution
 SELECT 
-    'parameters' as metric,
+    CASE 
+        WHEN publication_date < '2012-01-01' OR publication_date IS NULL THEN 'Era 1: Classical ML (Before 2012)'
+        WHEN publication_date >= '2012-01-01' AND publication_date < '2017-01-01' THEN 'Era 2: Deep Learning (2012-2017)'
+        WHEN publication_date >= '2017-01-01' THEN 'Era 3: Transformer (2017+)'
+        ELSE 'Unknown Era'
+    END as analysis_type,
     COUNT(*) as total_count,
-    CAST(MIN(parameters) as INTEGER) as min_value,
-    CAST(MAX(parameters) as INTEGER) as max_value,
-    CAST(AVG(parameters) as INTEGER) as avg_value,
-    0 as median_value
+    MIN(parameters) as min_parameters,
+    MAX(parameters) as max_parameters,
+    AVG(CAST(parameters AS REAL)) as avg_parameters,
+    MIN(LOG10(CAST(parameters AS REAL))) as min_log10_parameters,
+    MAX(LOG10(CAST(parameters AS REAL))) as max_log10_parameters,
+    AVG(LOG10(CAST(parameters AS REAL))) as avg_log10_parameters
 FROM ai_models 
 WHERE parameters IS NOT NULL 
-  AND training_dataset_size_datapoints IS NOT NULL
-  AND parameters > 0 
-  AND training_dataset_size_datapoints > 0
-
-UNION ALL
-
--- Basic statistics for training dataset size
-SELECT 
-    'training_dataset_size_datapoints' as metric,
-    COUNT(*) as total_count,
-    CAST(MIN(training_dataset_size_datapoints) as INTEGER) as min_value,
-    CAST(MAX(training_dataset_size_datapoints) as INTEGER) as max_value,
-    CAST(AVG(training_dataset_size_datapoints) as INTEGER) as avg_value,
-    0 as median_value
-FROM ai_models 
-WHERE parameters IS NOT NULL 
-  AND training_dataset_size_datapoints IS NOT NULL
-  AND parameters > 0 
-  AND training_dataset_size_datapoints > 0
-
-UNION ALL
-
--- Domain distribution
-SELECT 
-    'domain_distribution' as metric,
-    COUNT(*) as total_count,
-    COUNT(DISTINCT domain) as min_value,
-    0 as max_value,
-    0 as avg_value,
-    0 as median_value
-FROM ai_models 
-WHERE parameters IS NOT NULL 
-  AND training_dataset_size_datapoints IS NOT NULL
-  AND parameters > 0 
-  AND training_dataset_size_datapoints > 0
-
--- Domain breakdown query (separate from main stats)
--- This will run as a separate query to avoid issues with mixed result sets 
+    AND parameters > 0
+    AND training_dataset_size_datapoints IS NOT NULL 
+    AND training_dataset_size_datapoints > 0
+GROUP BY 
+    CASE 
+        WHEN publication_date < '2012-01-01' OR publication_date IS NULL THEN 'Era 1: Classical ML (Before 2012)'
+        WHEN publication_date >= '2012-01-01' AND publication_date < '2017-01-01' THEN 'Era 2: Deep Learning (2012-2017)'
+        WHEN publication_date >= '2017-01-01' THEN 'Era 3: Transformer (2017+)'
+        ELSE 'Unknown Era'
+    END
+ORDER BY analysis_type; 
